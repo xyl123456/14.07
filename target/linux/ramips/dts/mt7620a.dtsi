@@ -77,21 +77,6 @@
 			interrupts = <3>;
 		};
 
-		uart@500 {
-			compatible = "ralink,mt7620a-uart", "ralink,rt2880-uart", "ns16550a";
-			reg = <0x500 0x100>;
-
-			resets = <&rstctrl 12>;
-			reset-names = "uart";
-
-			interrupt-parent = <&intc>;
-			interrupts = <5>;
-
-			reg-shift = <2>;
-
-			status = "disabled";
-		};
-
 		gpio0: gpio@600 {
 			compatible = "ralink,mt7620a-gpio", "ralink,rt2880-gpio";
 			reg = <0x600 0x34>;
@@ -116,6 +101,9 @@
 			compatible = "ralink,mt7620a-gpio", "ralink,rt2880-gpio";
 			reg = <0x638 0x24>;
 
+			resets = <&rstctrl 13>;
+			reset-names = "pio";
+
 			interrupt-parent = <&intc>;
 			interrupts = <6>;
 
@@ -127,8 +115,7 @@
 			ralink,register-map = [ 00 04 08 0c
 						10 14 18 1c
 						20 24 ];
-
-			status = "disabled";
+			
 		};
 
 		gpio2: gpio@660 {
@@ -146,8 +133,8 @@
 			ralink,register-map = [ 00 04 08 0c
 						10 14 18 1c
 						20 24 ];
-
-			status = "disabled";
+			
+			
 		};
 
 		gpio3: gpio@688 {
@@ -165,8 +152,8 @@
 			ralink,register-map = [ 00 04 08 0c
 						10 14 18 1c
 						20 24 ];
-
-			status = "disabled";
+			
+			
 		};
 
 		i2c@900 {
@@ -234,6 +221,22 @@
 			pinctrl-0 = <&uartlite_pins>;
 		};
 
+		uart@500 {
+			compatible = "ralink,mt7620a-uart", "ralink,rt2880-uart", "ns16550a";
+			reg = <0x500 0x100>;
+
+			resets = <&rstctrl 12>;
+			reset-names = "uart";
+
+			interrupt-parent = <&intc>;
+			interrupts = <5>;
+
+			reg-shift = <2>;
+
+			pinctrl-names = "default";
+			pinctrl-0 = <&pcm_uartf_pins>;
+		};
+
 		systick@d00 {
 			compatible = "ralink,mt7620a-systick", "ralink,cevt-systick";
 			reg = <0xd00 0x10>;
@@ -282,16 +285,10 @@
 		pinctrl-0 = <&state_default>;
 		state_default: pinctrl0 {
 		};
-		pcm_i2s_pins: pcm_i2s {
-			pcm_i2s {
+		pcm_uartf_pins: pcm_uartf {
+			pcm_uartf {
 				ralink,group = "uartf";
-				ralink,function = "pcm i2s";
-			};
-		};
-		uartf_gpio_pins: uartf_gpio {
-			uartf_gpio {
-				ralink,group = "uartf";
-				ralink,function = "gpio uartf";
+				ralink,function = "pcm uartf";
 			};
 		};
 		spi_pins: spi {

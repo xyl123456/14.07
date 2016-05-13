@@ -129,9 +129,14 @@ ramips_setup_interfaces()
 		;;
 
 	ur-336un)
-		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2" 
 		;;
-
+	mt7620a)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "0 1 2 3 6t"
+		ucidef_add_switch_vlan "switch0" "2" "4 6t"
+		;;
 	br6524n | \
 	v11st-fe)
 		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
@@ -268,6 +273,18 @@ ramips_setup_macs()
 	dir-645)
 		lan_mac=$(mtd_get_mac_ascii nvram lanmac)
 		wan_mac=$(mtd_get_mac_ascii nvram wanmac)
+		;;
+	
+	mt7620a)
+		local tmpmac
+		[ -f /tmp/macid ] && tmpmac=$(cat /tmp/macid)
+		[ -z "$tmpmac" ] && \
+			r1=$(dd if=/dev/urandom bs=1 count=1 | hexdump -e '1/1 "%02x"') && \
+			r2=$(dd if=/dev/urandom bs=1 count=1 | hexdump -e '1/1 "%02x"') && \
+			r3=$(dd if=/dev/urandom bs=1 count=1 | hexdump -e '1/1 "%02x"') && \
+			tmpmac=00:0c:43:$r1:$r2:$r3 && echo "$tmpmac" > /tmp/macid
+		wan_mac=${tmpmac}
+		lan_mac=$(macaddr_add "$wan_mac" -1)
 		;;
 
 	wcr-150gn)

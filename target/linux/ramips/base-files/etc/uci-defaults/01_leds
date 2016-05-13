@@ -210,6 +210,11 @@ case $board in
 		set_usb_led "lenovo:blue:usb"
 		set_wifi_led "lenovo:blue:wifi"
 		;;
+	mt7620a)
+		ucidef_set_led_default "sys" "sys" "mt7620a:blue:sys" "1"
+		ucidef_set_led_netdev "wan" "wan" "mt7620a:blue:wan" "eth0.2"
+		ucidef_set_led_netdev "wifi" "wifi" "mt7620a:blue:wifi" "ra0"
+		;;
 esac
 
 ucidef_commit_leds

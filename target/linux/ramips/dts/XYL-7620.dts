@@ -4,7 +4,7 @@
 
 / {
 	compatible = "ralink,mt7620a-eval-board", "ralink,mt7620a-soc";
-	model = "LYSOC LY7620";
+	model = "Ralink MT7620a + MT7610e evaluation board";
 
 	palmbus@10000000 {
 		spi@b00 {
@@ -38,7 +38,7 @@
 
 				partition@50000 {
 					label = "firmware";
-					reg = <0x50000 0xfb0000>;
+					reg = <0x50000 0x7b0000>;
 				};
 			};
 		};
@@ -46,10 +46,9 @@
 
 	pinctrl {
 		state_default: pinctrl0 {
-			default {
-				ralink,group = "uartf","wled";
+			gpio {
+				ralink,group = "i2c", "uartf";
 				ralink,function = "gpio";
-				
 			};
 		};
 	};
@@ -61,6 +60,7 @@
 		pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
 
 		ralink,port-map = "llllw";
+
 		port@4 {
 			status = "okay";
 			phy-mode = "rgmii";
@@ -87,6 +87,11 @@
 			};
 		};
 	};
+
+	gsw@10110000 {
+		ralink,port4 = "gmac";
+	};
+
 	sdhci@10130000 {
 		status = "okay";
 	};
@@ -100,10 +105,15 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 		poll-interval = <20>;
-		s1 {
-			label = "S1";
-			gpios = <&gpio0 0 1>;
-			linux,code = <0x198>;
+		s2 {
+			label = "S2";
+			gpios = <&gpio0 1 1>;
+			linux,code = <0x100>;
+		};
+		s3 {
+			label = "S3";
+			gpios = <&gpio0 2 1>;
+			linux,code = <0x101>;
 		};
 	};
 
@@ -114,17 +124,4 @@
 	ohci@101c1000 {
 		status = "okay";
 	};
-	gpio-leds {
-		compatible = "gpio-leds";
-		sys {
-			label = "mt7620a:blue:sys";
-			gpios = <&gpio0 9 1>;
-		};
-		wan {
-			label = "mt7620a:blue:wan";
-			gpios = <&gpio3 0 1>;
-		};
-		
-	};
 };
-
