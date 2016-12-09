@@ -1,0 +1,46 @@
+#!/bin/sh /etc/rc.common
+
+START=50
+
+run_init()
+{
+	local rs232_1
+	local rs232_2
+	local rs232_3
+	local rs232_4
+	config_get rs232_1 $1 rs232_1
+	config_get rs232_2 $1 rs232_2
+	config_get rs232_3 $1 rs232_3
+	config_get rs232_4 $1 rs232_4
+
+	if [ $rs232_1 == '1' ]; then
+		echo "config 1 is ok!" >> /tmp/test.txt
+	else
+		echo "config 1 is 0"  >> /tmp/test.txt
+	fi
+
+	if [ $rs232_2 == '1' ]; then
+		echo "config 2 is ok" >> /tmp/test.txt
+	else
+		echo "config 2 is 0" >> /tmp/test.txt
+	fi
+
+	if [ $rs232_3 == '1' ]; then
+		echo "config 3 is ok" >> /tmp/test.txt
+	else
+		echo "config 3 is 0" >> /tmp/test.txt
+	fi
+
+	if [ $rs232_4 == '1' ]; then
+		echo "config 4 is ok" >> /tmp/test.txt
+	else
+		echo "config 4 is 0" >> /tmp/test.txt
+	fi
+}
+
+start()
+{
+	config_load rs232
+	config_foreach run_init rs232
+}
+
